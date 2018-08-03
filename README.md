@@ -3,7 +3,7 @@ This is simple shell script for listing all git branches which were committed be
 You can delete those branches like:
 
 ```shell
-git-list-old-branches -b 20180708 | xargs git branch -D
+git-list-old-branches -b 2018-07-08 | xargs git branch -D
 ```
 
 ## Usage
