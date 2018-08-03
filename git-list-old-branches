@@ -12,7 +12,7 @@ Usage:
 Options:
     -v    Version
     -h    Show help of this command
-    -b    List branches before this date. yyyyMMdd 
+    -b    List branches before this date. YYYY-MM-DD
 EOF
   exit "$1"
 }
@@ -43,3 +43,17 @@ fi
 [ "$help_flag" = "TRUE" ] && usage_exit 0
 [ "$invalid_opt_flag" = "TRUE" ] && usage_exit 1
 [ -z "$opt_b" ] && usage_exit 1
+
+
+passed_ms() {
+  base_second=$(date -j -f "%Y-%m-%d" "$1" "+%s")
+  compared_second=$(date -j -f "%Y-%m-%d" "$2" "+%s")
+  expr "$compared_second" - "$base_second"
+}
+
+
+for branch in $(git for-each-ref | awk '{print $3}'); do
+  last_commit_date=$(git --no-pager log "$branch" -1 --format=%cd --date=short)
+  passed_millisec=$(passed_ms "$opt_b" "$last_commit_date")
+  [ "$passed_millisec" -lt 0 ] && echo "$branch"
+done
