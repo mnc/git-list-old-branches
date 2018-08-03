@@ -1,1 +1,45 @@
 #!/bin/bash
+
+set -e
+
+VERSION='0.1.0'
+
+usage_exit() {
+  cat <<EOF
+Usage:
+    $(basename "${0}") [options]
+
+Options:
+    -v    Version
+    -h    Show help of this command
+    -b    List branches before this date. yyyyMMdd 
+EOF
+  exit "$1"
+}
+
+while getopts :b:vh OPT
+do
+  case $OPT in
+    "v") 
+      version_flag="TRUE"
+      ;;
+    "h") 
+      help_flag="TRUE"
+      ;;
+    "b") 
+      opt_b="$OPTARG"
+      ;;
+    *)
+      invalid_opt_flag="TRUE"
+      ;;
+  esac
+done
+
+if [ "$version_flag" = "TRUE" ]; then
+  echo $VERSION
+  exit
+fi
+
+[ "$help_flag" = "TRUE" ] && usage_exit 0
+[ "$invalid_opt_flag" = "TRUE" ] && usage_exit 1
+[ -z "$opt_b" ] && usage_exit 1
