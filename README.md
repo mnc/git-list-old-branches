@@ -10,12 +10,16 @@ git-list-old-branches -b 2018-07-08 | xargs git branch -D
 
 ```
 Usage:
-    git-list-old-branches [options]
+    git-list-old-branches -b YYYY-MM-DD [Options]
+
+Requires:
+    -b    List branches before this date (YYYY-MM-DD)
 
 Options:
     -v    Version
     -h    Show help of this command
-    -b    List branches before this date. yyyyMMdd
+    -a    List local branches and tracking branches if specified
+          List only local branches if not specified
 ```
 
 ## Installation
