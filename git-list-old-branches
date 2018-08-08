@@ -58,9 +58,19 @@ passed_ms() {
   expr "$compared_second" - "$base_second"
 }
 
-
-for branch in $(git for-each-ref | awk '{print $3}'); do
+echo_filtered_branch() {
+  branch=$1
   last_commit_date=$(git --no-pager log "$branch" -1 --format=%cd --date=short)
   passed_millisec=$(passed_ms "$opt_b" "$last_commit_date")
   [ "$passed_millisec" -lt 0 ] && echo "$branch"
-done
+}
+
+if [ "$all_flag" = "TRUE" ]; then
+  for branch in $(git for-each-ref --format='%(refname:short)' refs/heads refs/remotes); do
+    echo_filtered_branch "$branch"
+  done
+else
+  for branch in $(git for-each-ref --format='%(refname:short)' refs/heads); do
+    echo_filtered_branch "$branch"
+  done
+fi
