@@ -3,7 +3,7 @@ This is simple shell script for listing all git branches which were committed be
 You can delete those branches like:
 
 ```shell
-git-list-old-branches -b 20180708 | xargs git branch -D
+git-list-old-branches -b 2018-07-08 | xargs git branch -D
 ```
 
 ## Usage
@@ -23,15 +23,15 @@ Options:
 ### Linux
 
 ```shell
-curl https://raw.githubusercontent.com/mnc/git-list-old-branches/master/git-list-old-branches | sudo tee /usr/local/bin/rails-console-ecs
-sudo chmod +x /usr/local/bin/git-list-old-branches
+curl https://raw.githubusercontent.com/mnc/git-list-old-branches/master/git-list-old-branches | sudo tee /usr/bin/git-list-old-branches
+sudo chmod +x /usr/bin/git-list-old-branches
 ```
 
 ### Mac
 
 ```shell
-curl https://raw.githubusercontent.com/mnc/git-list-old-branches/master/git-list-old-branches | sudo tee /usr/bin/git-list-old-branches
-sudo chmod +x /usr/bin/git-list-old-branches
+curl https://raw.githubusercontent.com/mnc/git-list-old-branches/master/git-list-old-branches | sudo tee /usr/local/bin/git-list-old-branches
+sudo chmod +x /usr/local/bin/git-list-old-branches
 ```
 
 ## License
