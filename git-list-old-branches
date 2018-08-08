@@ -7,17 +7,21 @@ VERSION='0.1.0'
 usage_exit() {
   cat <<EOF
 Usage:
-    $(basename "${0}") [options]
+    $(basename "${0}") -b YYYY-MM-DD [Options]
+
+Requires:
+    -b    List branches before this date (YYYY-MM-DD)
 
 Options:
     -v    Version
     -h    Show help of this command
-    -b    List branches before this date. YYYY-MM-DD
+    -a    List local branches and tracking branches if specified
+          List only local branches if not specified
 EOF
   exit "$1"
 }
 
-while getopts :b:vh OPT
+while getopts :b:vha OPT
 do
   case $OPT in
     "v") 
@@ -25,6 +29,9 @@ do
       ;;
     "h") 
       help_flag="TRUE"
+      ;;
+    "a") 
+      all_flag="TRUE"
       ;;
     "b") 
       opt_b="$OPTARG"
