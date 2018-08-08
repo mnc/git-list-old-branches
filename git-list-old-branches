@@ -19,6 +19,10 @@ EOF
   exit "$1"
 }
 
+abort() {
+  echo "$@" 1>&2
+}
+
 while getopts :b:vha OPT
 do
   case $OPT in
@@ -49,6 +53,9 @@ fi
 [ "$invalid_opt_flag" = "TRUE" ] && usage_exit 1
 [ -z "$opt_b" ] && usage_exit 1
 
+if [[ ! "$opt_b" =~ ^[1-9][0-9]{3}-([0][1-9]|[1][0-2])-([0][1-9]|[1-2][0-9]|[3][0-1])$ ]]; then
+  abort "-b option is invalid date format" && exit 1
+fi
 
 passed_ms() {
   local base_second=$(date -j -f "%Y-%m-%d" "$1" "+%s")
