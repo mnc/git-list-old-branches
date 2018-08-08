@@ -1,6 +1,6 @@
 # git-list-old-branches
 This is simple shell script for listing all git branches which were committed before specified date.
-You can delete those branches like:
+For example, you can delete those branches like:
 
 ```shell
 git-list-old-branches -b 2018-07-08 | xargs git branch -D
