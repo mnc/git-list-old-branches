@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 VERSION='0.1.0'
 
 usage_exit() {
@@ -53,24 +51,35 @@ fi
 
 
 passed_ms() {
-  base_second=$(date -j -f "%Y-%m-%d" "$1" "+%s")
-  compared_second=$(date -j -f "%Y-%m-%d" "$2" "+%s")
+  local base_second=$(date -j -f "%Y-%m-%d" "$1" "+%s")
+  local compared_second=$(date -j -f "%Y-%m-%d" "$2" "+%s")
   expr "$compared_second" - "$base_second"
 }
 
-echo_filtered_branch() {
-  branch=$1
-  last_commit_date=$(git --no-pager log "$branch" -1 --format=%cd --date=short)
-  passed_millisec=$(passed_ms "$opt_b" "$last_commit_date")
-  [ "$passed_millisec" -lt 0 ] && echo "$branch"
+filter_branch() {
+  local last_commit_date=$(git --no-pager log "$1" -1 --format=%cd --date=short)
+  local passed_millisec=$(passed_ms "$opt_b" "$last_commit_date")
+  [ "$passed_millisec" -lt 0 ] && echo "$1"
+}
+
+output_all_branches() {
+  local branch
+  for branch in $(git for-each-ref --format='%(refname:short)' refs/heads refs/remotes); do
+    filtered_branch=$(filter_branch "$branch")
+    [ -n "$filtered_branch" ] && echo "$filtered_branch"
+  done
+}
+
+output_local_branches() {
+  local branch
+  for branch in $(git for-each-ref --format='%(refname:short)' refs/heads); do
+    filtered_branch=$(filter_branch "$branch")
+    [ -n "$filtered_branch" ] && echo "$filtered_branch"
+  done
 }
 
 if [ "$all_flag" = "TRUE" ]; then
-  for branch in $(git for-each-ref --format='%(refname:short)' refs/heads refs/remotes); do
-    echo_filtered_branch "$branch"
-  done
+  output_all_branches
 else
-  for branch in $(git for-each-ref --format='%(refname:short)' refs/heads); do
-    echo_filtered_branch "$branch"
-  done
+  output_local_branches
 fi
